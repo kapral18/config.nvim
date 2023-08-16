@@ -2,6 +2,13 @@ local Util = require("lazyvim.util")
 
 return {
   "nvim-telescope/telescope.nvim",
+  dependencies = {
+    "nvim-telescope/telescope-fzf-native.nvim",
+    build = "make",
+    config = function()
+      require("telescope").load_extension("fzf")
+    end,
+  },
   opts = {
     defaults = {
       vimgrep_arguments = {
@@ -19,28 +26,13 @@ return {
   keys = {
     {
       "<leader>sg",
-      function()
-        require("telescope.builtin").grep_string({
-          shorten_path = true,
-          word_match = "-w",
-          only_sort_text = true,
-          search = "",
-        })
-      end,
-      desc = "Grep (root dir)",
-    },
-    {
-      "<leader>sG",
-      function()
-        require("telescope.builtin").grep_string({
-          shorten_path = true,
-          word_match = "-w",
-          only_sort_text = true,
-          search = "",
-          cwd = false,
-        })
-      end,
-      desc = "Grep (cwd)",
+      Util.telescope("grep_string", {
+        shorten_path = true,
+        word_match = "-w",
+        only_sort_text = true,
+        search = "",
+      }),
+      desc = "Grep (project root)",
     },
   },
 }
