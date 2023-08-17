@@ -23,16 +23,4 @@ return {
       },
     },
   },
-  keys = {
-    {
-      "<leader>sg",
-      Util.telescope("grep_string", {
-        shorten_path = true,
-        word_match = "-w",
-        only_sort_text = true,
-        search = "",
-      }),
-      desc = "Grep (project root)",
-    },
-  },
 }
