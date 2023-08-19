@@ -1,10 +1,12 @@
 return {
   {
     "williamboman/mason.nvim",
-    opts = function(_, opts)
-      table.insert(opts.ensure_installed, "proselint")
-      table.insert(opts.ensure_installed, "write-good")
-    end,
+    opts = {
+      ensure_installed = {
+        "proselint",
+        "write-good",
+      },
+    },
   },
   {
     "jose-elias-alvarez/null-ls.nvim",

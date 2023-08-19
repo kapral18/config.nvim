@@ -7,8 +7,10 @@ vim.filetype.add({
 return {
   {
     "williamboman/mason.nvim",
-    opts = function(_, opts)
-      table.insert(opts.ensure_installed, "mdx-analyzer")
-    end,
+    opts = {
+      ensure_installed = {
+        "mdx-analyzer",
+      },
+    },
   },
 }
