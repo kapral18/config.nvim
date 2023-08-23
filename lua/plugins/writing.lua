@@ -1,12 +1,12 @@
 return {
   {
     "williamboman/mason.nvim",
-    opts = {
-      ensure_installed = {
+    opts = function(_, opts)
+      vim.list_extend(opts.ensure_installed, {
         "proselint",
         "write-good",
-      },
-    },
+      })
+    end,
   },
   {
     "jose-elias-alvarez/null-ls.nvim",
