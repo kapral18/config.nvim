@@ -59,3 +59,6 @@ vim.keymap.set({ "n", "v" }, "<leader>fgx", ":DiffviewClose<CR>", { desc = "Diff
 vim.keymap.set("n", "<leader>gb", ":Telescope git_branches<CR>", { desc = "branches" })
 vim.keymap.set("n", "<leader>gc", ":Telescope git_commits<CR>", { desc = "commits" })
 vim.keymap.set("n", "<leader>gC", ":Telescope git_bcommits<CR>", { desc = "buffer commits" })
+
+-- disable save
+vim.keymap.del({ "n", "s", "x" }, "<C-s>")
