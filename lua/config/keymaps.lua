@@ -62,3 +62,8 @@ vim.keymap.set("n", "<leader>gC", ":Telescope git_bcommits<CR>", { desc = "buffe
 
 -- disable save
 vim.keymap.del({ "n", "s", "x" }, "<C-s>")
+
+-- jump 5 lines up and down at a time with shift-j and shift-k
+-- move faster with shift
+vim.keymap.set({ "n", "v" }, "<C-j>", "5j", { noremap = true, silent = true, desc = "Jump 5 lines down" })
+vim.keymap.set({ "n", "v" }, "<C-k>", "5k", { noremap = true, silent = true, desc = "Jump 5 lines up" })
