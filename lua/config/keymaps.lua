@@ -65,8 +65,8 @@ vim.keymap.del({ "n", "s", "x" }, "<C-s>")
 
 -- jump 5 lines up and down at a time with shift-j and shift-k
 -- move faster with shift
-vim.keymap.set({ "n", "v" }, "<C-j>", "5j", { noremap = true, silent = true, desc = "Jump 5 lines down" })
-vim.keymap.set({ "n", "v" }, "<C-k>", "5k", { noremap = true, silent = true, desc = "Jump 5 lines up" })
+vim.keymap.set({ "n", "v" }, "<C-S-j>", "5j", { noremap = true, silent = true, desc = "Jump 5 lines down" })
+vim.keymap.set({ "n", "v" }, "<C-S-k>", "5k", { noremap = true, silent = true, desc = "Jump 5 lines up" })
 
 -- Remap Ctrl-^ to switch between alternate test and source files
 vim.keymap.set(
@@ -76,7 +76,7 @@ vim.keymap.set(
   { noremap = true, silent = true, desc = "Switch Src/Test File" }
 )
 
-vim.api.nvim_exec(
+vim.api.nvim_exec2(
   [[
   function! SwitchSrcTestFile()
     let current_file = expand("%")
@@ -102,6 +102,6 @@ vim.api.nvim_exec(
       return ""
     endif
   endfunction
-]],
-  false
+  ]],
+  {}
 )
