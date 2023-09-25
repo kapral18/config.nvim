@@ -19,6 +19,21 @@ return {
         "--smart-case",
         "--hidden",
       },
+      path_display = {
+        truncate = 3,
+      },
+      dynamic_preview_title = true,
+      preview = {
+        filesize_limit = 1,
+        tmeout = 100,
+        treesitter = true,
+      },
+      layout_config = {
+        height = 0.95,
+        width = 0.95,
+        prompt_position = "top",
+        preview_width = 0.5,
+      },
     },
   },
 }
