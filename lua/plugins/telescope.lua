@@ -32,7 +32,6 @@ return {
         height = 0.95,
         width = 0.95,
         prompt_position = "top",
-        preview_width = 0.5,
       },
     },
   },
