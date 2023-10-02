@@ -22,5 +22,46 @@ return {
       -- (fugitive is still needed to open in browser)
       "sindrets/diffview.nvim", --- See dependencies
     },
+    init = function()
+      -- advanceg-git-search
+      vim.keymap.set({ "n", "v" }, "<leader>fgg", ":AdvancedGitSearch<CR>", { desc = "AdvancedGitSearch" })
+      vim.keymap.set(
+        { "n", "v" },
+        "<leader>fgr",
+        ":AdvancedGitSearch search_log_content<CR>",
+        { desc = "AGS Repo History Search" }
+      )
+      vim.keymap.set(
+        { "n", "v" },
+        "<leader>fgf",
+        ":AdvancedGitSearch search_log_content_file<CR>",
+        { desc = "AGS File History Search" }
+      )
+      vim.keymap.set(
+        { "n", "v" },
+        "<leader>fgdf",
+        ":AdvancedGitSearch diff_commit_file<CR>",
+        { desc = "AGS File vs commit" }
+      )
+      vim.keymap.set(
+        { "n", "v" },
+        "<leader>fgdl",
+        ":AdvancedGitSearch diff_commit_line<CR>",
+        { desc = "AGS Line vs commit" }
+      )
+      vim.keymap.set(
+        { "n", "v" },
+        "<leader>fgdb",
+        ":AdvancedGitSearch diff_branch_file<CR>",
+        { desc = "AGS Branch vs commit" }
+      )
+      vim.keymap.set(
+        { "n", "v" },
+        "<leader>fgre",
+        ":AdvancedGitSearch checkout_reflog<CR>",
+        { desc = "AGS Checkout reflog" }
+      )
+      vim.keymap.set({ "n", "v" }, "<leader>fgx", ":DiffviewClose<CR>", { desc = "DiffviewClose" })
+    end,
   },
 }
