@@ -1,5 +1,5 @@
 {
-  "LazyVim": { "branch": "main", "commit": "ecac59c9823c86ac4c916a4cc1aa761f43e040ec" },
+  "LazyVim": { "branch": "main", "commit": "4e277fcb8f6c73fe557f140ff407b3be691f31f6" },
   "LuaSnip": { "branch": "master", "commit": "480b032f6708573334f4437d3f83307d143f1a72" },
   "SchemaStore.nvim": { "branch": "main", "commit": "08ab25507a92e22cec433f6750bb4a56a8cec22d" },
   "Vim-Jinja2-Syntax": { "branch": "master", "commit": "2c17843b074b06a835f88587e1023ceff7e2c7d1" },

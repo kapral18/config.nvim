@@ -38,17 +38,12 @@ return {
       },
     },
   },
+  keys = {
+    { "<leader>gb", ":Telescope git_branches<CR>", desc = "branches" },
+    { "<leader>gc", ":Telescope git_commits<CR>", desc = "commits" },
+    { "<leader>gC", ":Telescope git_bcommits<CR>", desc = "buffer commits" },
+  },
   init = function()
     vim.cmd("autocmd User TelescopePreviewerLoaded setlocal number")
-    -- telescope
-    vim.keymap.set(
-      "n",
-      "<leader>sx",
-      require("telescope.builtin").resume,
-      { noremap = true, silent = true, desc = "Resume" }
-    )
-    vim.keymap.set("n", "<leader>gb", ":Telescope git_branches<CR>", { desc = "branches" })
-    vim.keymap.set("n", "<leader>gc", ":Telescope git_commits<CR>", { desc = "commits" })
-    vim.keymap.set("n", "<leader>gC", ":Telescope git_bcommits<CR>", { desc = "buffer commits" })
   end,
 }
