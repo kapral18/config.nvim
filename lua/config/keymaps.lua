@@ -19,6 +19,14 @@ vim.keymap.set(
   { noremap = true, silent = true, desc = "Switch Src/Test File" }
 )
 
+-- Paste on cmd+v
+vim.keymap.set("v", "<D-c>", "y", { remap = true })
+vim.keymap.set({ "n", "v" }, "<D-v>", '"+p', { remap = true })
+vim.keymap.set("i", "<D-v>", "<C-r>+", { remap = true })
+
+-- Delete a word by alt+backspace
+vim.keymap.set("i", "<A-BS>", "<C-w>", { noremap = true })
+
 vim.api.nvim_exec2(
   [[
   function! SwitchSrcTestFile()
