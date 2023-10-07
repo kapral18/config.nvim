@@ -56,3 +56,13 @@ vim.api.nvim_exec2(
   ]],
   {}
 )
+
+-- Disable default window resize maps to allow visual multi to use them
+vim.keymap.del("n", "<C-Up>")
+vim.keymap.del("n", "<C-Down>")
+vim.keymap.del("n", "<C-Left>")
+vim.keymap.del("n", "<C-Right>")
+vim.keymap.set("n", "<C-S-Up>", "<cmd>resize -2<cr>", { desc = "Increase window height" })
+vim.keymap.set("n", "<C-S-Down>", "<cmd>resize +2<cr>", { desc = "Decrease window height" })
+vim.keymap.set("n", "<C-S-Left>", "<cmd>vertical resize +2<cr>", { desc = "Increase window width" })
+vim.keymap.set("n", "<C-S-Right>", "<cmd>vertical resize -2<cr>", { desc = "Decrase window width" })
