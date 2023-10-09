@@ -1,55 +1,57 @@
-local Util = require("lazyvim.util")
 -- this is a local variable that controls size of the terminal
 local terminal_size = 20
 
 return {
   {
     "akinsho/toggleterm.nvim",
-    config = function(opts)
-      require("toggleterm").setup(vim.tbl_deep_extend("force", opts, {
-        size = function(term)
-          if term.direction == "horizontal" then
-            return terminal_size
-          elseif term.direction == "vertical" then
-            return vim.o.columns * (terminal_size / 100)
-          end
-        end,
-      }))
-
-      -- remove default lazyvim mapping for toggling terminal from inside terminal
-      vim.keymap.del({ "t" }, "<C-/>")
-      -- remove default lazyvim mapping for toggling terminal from normal mode
-      vim.keymap.del({ "n" }, "<c-/>")
-    end,
+    opts = {
+      size = function(term)
+        if term.direction == "horizontal" then
+          return terminal_size
+        elseif term.direction == "vertical" then
+          return vim.o.columns * (terminal_size / 100)
+        end
+      end,
+      start_in_insert = false,
+    },
     keys = {
       {
-        "<m-)>0",
+        "<a-t>t",
         '<Cmd>execute v:count . "ToggleTerm"<CR>',
         desc = "Toggle Terminal",
         silent = true,
       },
       {
-        "<m-)>0",
+        "<a-t>t",
         '<Esc><Cmd>execute v:count . "ToggleTerm"<CR>',
-        mode = { "i", "t" },
-        desc = "Torggle Terminal",
+        desc = "Toggle Terminal",
+        mode = { "t", "i" },
         silent = true,
       },
       {
-        "<m-)>h",
-        function()
-          local count = vim.v.count1
-          require("toggleterm").toggle(count, terminal_size, Util.get_root(), "horizontal")
-        end,
+        "<a-t>h",
+        '<Cmd>execute v:count . "ToggleTerm direction=horizontal"<CR>',
         desc = "ToggleTerm (horizontal)",
       },
       {
-        "<m-)>v",
-        function()
-          local count = vim.v.count1
-          require("toggleterm").toggle(count, vim.o.columns * (terminal_size / 100), Util.get_root(), "vertical")
-        end,
+        "<a-t>h",
+        '<Esc><Cmd>execute v:count . "ToggleTerm direction=horizontal"<CR>',
+        desc = "Toggle Terminal (horizontal)",
+        mode = { "t", "i" },
+        silent = true,
+      },
+      {
+        "<a-t>v",
+        '<Cmd>execute v:count . "ToggleTerm direction=vertical"<CR>',
         desc = "ToggleTerm (vertical)",
+        silent = true,
+      },
+      {
+        "<a-t>v",
+        '<Esc><Cmd>execute v:count . "ToggleTerm direction=vertical"<CR>',
+        desc = "Toggle Terminal (vertical)",
+        mode = { "t", "i" },
+        silent = true,
       },
     },
   },
