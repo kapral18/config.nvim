@@ -3,7 +3,7 @@ return {
     "williamboman/mason.nvim",
     opts = function(_, opts)
       vim.list_extend(opts.ensure_installed, {
-        "vale",
+        "proselint",
       })
     end,
   },
@@ -11,8 +11,8 @@ return {
     "mfussenegger/nvim-lint",
     opts = {
       linters_by_ft = {
-        ["markdown"] = { "vale" },
-        ["markdown.mdx"] = { "vale" },
+        ["markdown"] = { "proselint" },
+        ["markdown.mdx"] = { "proselint" },
       },
     },
   },
