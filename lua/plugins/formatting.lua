@@ -23,7 +23,7 @@ return {
         ["jsonc"] = { "prettier" },
         ["yaml"] = { "prettier" },
         ["markdown"] = { "prettier" },
-        ["markdown.mdx"] = "prettier",
+        ["mdx"] = { "prettier" },
         ["graphql"] = { "prettier" },
         ["handlebars"] = { "prettier" },
         ["python"] = { "black" },
