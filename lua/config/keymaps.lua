@@ -65,8 +65,3 @@ vim.keymap.set("n", "<C-S-Up>", "<cmd>resize -2<cr>", { desc = "Increase window 
 vim.keymap.set("n", "<C-S-Down>", "<cmd>resize +2<cr>", { desc = "Decrease window height" })
 vim.keymap.set("n", "<C-S-Left>", "<cmd>vertical resize +2<cr>", { desc = "Increase window width" })
 vim.keymap.set("n", "<C-S-Right>", "<cmd>vertical resize -2<cr>", { desc = "Decrase window width" })
-
--- remove default lazyvim mapping for toggling terminal from inside terminal
-vim.keymap.del({ "t" }, "<C-/>")
--- remove default lazyvim mapping for toggling terminal from normal mode
-vim.keymap.del({ "n" }, "<c-/>")
