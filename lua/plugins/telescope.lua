@@ -1,5 +1,3 @@
-local Util = require("lazyvim.util")
-
 return {
   "nvim-telescope/telescope.nvim",
   dependencies = {
@@ -11,6 +9,21 @@ return {
   keys = {
     { "<leader>gb", ":Telescope git_branches<CR>", desc = "Branches" },
     { "<leader>gC", ":Telescope git_bcommits<CR>", desc = "Buffer Commits" },
+    { "<leader>sg", false },
+    { "<leader>sG", false },
+    { "<leader>ff", false },
+    { "<leader>fF", false },
+    { "<leader>/", ":Telescope live_grep_args<CR>", desc = "Live Grep" },
+    {
+      "<leader><space>",
+      function()
+        local action_state = require("telescope.actions.state")
+        local telescope_builtin = require("telescope.builtin")
+        local line = action_state.get_current_line()
+        telescope_builtin["find_files"]({ no_ignore = true, hidden = true, default_text = line })
+      end,
+      desc = "Find Files",
+    },
   },
   opts = function(_, opts)
     local defaults = {
@@ -23,10 +36,10 @@ return {
       return function()
         local action_state = require("telescope.actions.state")
         local line = action_state.get_current_line()
-        Util.telescope(
-          "find_files",
-          vim.tbl_deep_extend("force", defaults, { no_ignore = not no_ignore, default_text = line })
-        )
+        local telescope_builtin = require("telescope.builtin")
+        local is_ignored = not no_ignore
+        telescope_builtin["find_files"]({ no_ignore = is_ignored, hidden = defaults.hidden, default_text = line })
+        no_ignore = is_ignored
       end
     end)()
     local find_files_not_hidden = (function()
@@ -34,10 +47,10 @@ return {
       return function()
         local action_state = require("telescope.actions.state")
         local line = action_state.get_current_line()
-        Util.telescope(
-          "find_files",
-          vim.tbl_deep_extend("force", defaults, { hidden = not hidden, default_text = line })
-        )
+        local telescope_builtin = require("telescope.builtin")
+        local is_hidden = not hidden
+        telescope_builtin["find_files"]({ hidden = is_hidden, no_ignore = defaults.no_ignore, default_text = line })
+        hidden = is_hidden
       end
     end)()
 

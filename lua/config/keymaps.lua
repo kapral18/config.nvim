@@ -65,16 +65,3 @@ vim.keymap.set({ "n", "t" }, "<C-S-Up>", "<cmd>resize -2<cr>", { desc = "Increas
 vim.keymap.set({ "n", "t" }, "<C-S-Down>", "<cmd>resize +2<cr>", { desc = "Decrease window height" })
 vim.keymap.set({ "n", "t" }, "<C-S-Left>", "<cmd>vertical resize +2<cr>", { desc = "Increase window width" })
 vim.keymap.set({ "n", "t" }, "<C-S-Right>", "<cmd>vertical resize -2<cr>", { desc = "Decrase window width" })
-
--- Telescope
-vim.keymap.del("n", "<leader>sg")
-vim.keymap.del("n", "<leader>sG")
-vim.keymap.del("n", "<leader>ff")
-vim.keymap.del("n", "<leader>fF")
-vim.keymap.set("n", "<leader>/", ":Telescope live_grep_args<CR>", { desc = "Live Grep" })
-vim.keymap.set("n", "<leader><space>", function()
-  local action_state = require("telescope.actions.state")
-  local telescope_builtin = require("telescope.builtin")
-  local line = action_state.get_current_line()
-  telescope_builtin["find_files"]({ no_ignore = true, hidden = true, default_text = line })
-end, { desc = "Find Files" })
