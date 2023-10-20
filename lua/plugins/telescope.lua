@@ -3,45 +3,14 @@ local Util = require("lazyvim.util")
 return {
   "nvim-telescope/telescope.nvim",
   dependencies = {
-    {
-      "nvim-telescope/telescope-fzf-native.nvim",
-      build = "make",
-      config = function()
-        Util.on_load("telescope.nvim", function()
-          require("telescope").load_extension("fzf")
-        end)
-      end,
-    },
     { "tsakirist/telescope-lazy.nvim" },
     {
       "nvim-telescope/telescope-live-grep-args.nvim",
-      -- This will not install any breaking changes.
-      -- For major updates, this must be adjusted manually.
-      version = "^1.0.0",
-      config = function()
-        Util.on_load("telescope.nvim", function()
-          require("telescope").load_extension("live_grep_args")
-        end)
-      end,
     },
   },
   keys = {
     { "<leader>gb", ":Telescope git_branches<CR>", desc = "Branches" },
     { "<leader>gC", ":Telescope git_bcommits<CR>", desc = "Buffer Commits" },
-    { "<leader>/", ":Telescope live_grep_args<CR>", desc = "Live Grep" },
-    { "<leader>sg", false },
-    { "<leader>sG", false },
-    { "<leader>ff", false },
-    { "<leader>fF", false },
-    {
-      "<leader><space>",
-      function()
-        local action_state = require("telescope.actions.state")
-        local line = action_state.get_current_line()
-        Util.telescope("find_files", { no_ignore = true, hidden = true, default_text = line })
-      end,
-      desc = "Find Files",
-    },
   },
   opts = function(_, opts)
     local defaults = {
@@ -125,5 +94,11 @@ return {
   end,
   init = function()
     vim.cmd("autocmd User TelescopePreviewerLoaded setlocal number")
+  end,
+  config = function(_, opts)
+    local telescope = require("telescope")
+    telescope.setup(opts)
+    telescope.load_extension("live_grep_args")
+    telescope.load_extension("fzf")
   end,
 }
