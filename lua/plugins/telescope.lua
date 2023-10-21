@@ -17,40 +17,129 @@ return {
     {
       "<leader><space>",
       function()
-        local action_state = require("telescope.actions.state")
         local telescope_builtin = require("telescope.builtin")
-        local line = action_state.get_current_line()
-        telescope_builtin["find_files"]({ no_ignore = true, hidden = true, default_text = line })
+        telescope_builtin["find_files"]({ no_ignore = true, hidden = true, default_text = "" })
       end,
       desc = "Find Files",
     },
+    {
+      "<leader>sw",
+      function()
+        require("telescope-live-grep-args.shortcuts").grep_word_under_cursor()
+      end,
+      desc = "Live Grep <cWORD>",
+    },
+    {
+      "<leader>sw",
+      function()
+        require("telescope-live-grep-args.shortcuts").grep_visual_selection()
+      end,
+      mode = "v",
+      desc = "Live Grep Selection",
+    },
+    { "<leader>sW", false, mode = { "v", "n" } },
   },
   opts = function(_, opts)
+    ---@param pattern string
+    ---@return string escaped pattern
+    local function escape_pattern(pattern)
+      local escaped_pattern = pattern:gsub("[%-%.%+%[%]%(%)%$%^%%%?%*]", "%%%1")
+      return escaped_pattern
+    end
+
+    ---@param postfix string[]
+    local toggle_prompt_postfix = function(postfix)
+      local action_state = require("telescope.actions.state")
+      local picker = action_state.get_current_picker(vim.fn.bufnr())
+      local prompt = picker:_get_prompt()
+
+      for _, pfix in ipairs(postfix) do
+        local escaped_pfix = escape_pattern(pfix)
+        -- if prompt contains pfix anywhere (with optional leading space), remove it
+        if prompt:find("%s*" .. escaped_pfix) then
+          prompt = prompt:gsub("%s*" .. escaped_pfix, "")
+        else
+          prompt = prompt .. " " .. pfix
+        end
+      end
+
+      picker:set_prompt(prompt)
+    end
+
     local defaults = {
       hidden = true,
       no_ignore = true,
     }
 
-    local find_files_ignore = (function()
-      local no_ignore = true
+    local toggle_no_ignore = (function()
+      local no_ignore = defaults.no_ignore
+
       return function()
-        local action_state = require("telescope.actions.state")
-        local line = action_state.get_current_line()
         local telescope_builtin = require("telescope.builtin")
-        local is_ignored = not no_ignore
-        telescope_builtin["find_files"]({ no_ignore = is_ignored, hidden = defaults.hidden, default_text = line })
-        no_ignore = is_ignored
+        local action_state = require("telescope.actions.state")
+        local picker = action_state.get_current_picker(vim.fn.bufnr())
+        local prompt = picker:_get_prompt()
+        if picker.prompt_title == "Find Files" then
+          local is_ignored = not no_ignore
+          telescope_builtin["find_files"]({
+            no_ignore = is_ignored,
+            hidden = defaults.hidden,
+            default_text = prompt,
+          })
+          no_ignore = is_ignored
+        end
+
+        if picker.prompt_title == "Live Grep (Args)" then
+          toggle_prompt_postfix({ "--no-ignore" })
+        end
       end
     end)()
-    local find_files_not_hidden = (function()
+
+    local toggle_hidden = (function()
       local hidden = true
       return function()
-        local action_state = require("telescope.actions.state")
-        local line = action_state.get_current_line()
         local telescope_builtin = require("telescope.builtin")
-        local is_hidden = not hidden
-        telescope_builtin["find_files"]({ hidden = is_hidden, no_ignore = defaults.no_ignore, default_text = line })
-        hidden = is_hidden
+        local action_state = require("telescope.actions.state")
+        local picker = action_state.get_current_picker(vim.fn.bufnr())
+        local prompt = picker:_get_prompt()
+        if picker.prompt_title == "Find Files" then
+          local is_hidden = not hidden
+          telescope_builtin["find_files"]({
+            hidden = is_hidden,
+            no_ignore = defaults.no_ignore,
+            default_text = prompt,
+          })
+          hidden = is_hidden
+        end
+
+        if picker.prompt_title == "Live Grep (Args)" then
+          toggle_prompt_postfix({ "--hidden" })
+        end
+      end
+    end)()
+
+    local toggle_no_ignore_hidden = (function()
+      local no_ignore = defaults.no_ignore
+      local hidden = defaults.hidden
+      return function()
+        local telescope_builtin = require("telescope.builtin")
+        local action_state = require("telescope.actions.state")
+        local picker = action_state.get_current_picker(vim.fn.bufnr())
+        local prompt = picker:_get_prompt()
+        if picker.prompt_title == "Find Files" then
+          local is_ignored = not no_ignore
+          local is_hidden = not hidden
+          telescope_builtin["find_files"]({
+            no_ignore = is_ignored,
+            hidden = is_hidden,
+            default_text = prompt,
+          })
+          no_ignore = is_ignored
+          hidden = is_hidden
+        end
+        if picker.prompt_title == "Live Grep (Args)" then
+          toggle_prompt_postfix({ "--no-ignore", "--hidden" })
+        end
       end
     end)()
 
@@ -80,8 +169,9 @@ return {
       },
       mappings = {
         i = {
-          ["<a-i>"] = find_files_ignore,
-          ["<a-h>"] = find_files_not_hidden,
+          ["<a-i>"] = toggle_no_ignore,
+          ["<a-h>"] = toggle_hidden,
+          ["<a-a>"] = toggle_no_ignore_hidden,
         },
       },
     })
