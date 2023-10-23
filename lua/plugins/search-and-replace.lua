@@ -52,4 +52,18 @@ return {
       }
     end,
   },
+  -- Structural Search and Replace
+  {
+    "cshuaimin/ssr.nvim",
+    keys = {
+      {
+        "<leader>srs",
+        function()
+          require("ssr").open()
+        end,
+        mode = { "n", "x" },
+        desc = "Structural Replace",
+      },
+    },
+  },
 }

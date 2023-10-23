@@ -32,10 +32,6 @@ aucmd({ "BufReadPre" }, {
     local file_size = vim.fn.getfsize(file)
     if file_size > 100000 or file_size == -2 then
       vim.b.copilot_enabled = false
-      vim.wo.spell = false
-      vim.opt_local.synmaxcol = 250
-      -- disable some formatoptions
-      vim.opt_local.formatoptions:remove({ "a", "t" })
     end
   end,
 })
