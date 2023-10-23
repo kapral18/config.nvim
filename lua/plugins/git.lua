@@ -1,17 +1,4 @@
 return {
-  -- show git blame in virtual text by side of each line
-  {
-    "f-person/git-blame.nvim",
-    event = "BufRead",
-    cond = function()
-      -- check if .git directory exists in current or parent directories
-      return vim.loop.fs_stat(vim.loop.cwd() .. "/.git") or vim.fn.finddir(".git", ";") ~= ""
-    end,
-    config = function(_, opts)
-      vim.cmd("highlight default link gitblame SpecialComment")
-      require("gitblame").setup(opts)
-    end,
-  },
   -- git messages(commits, history, etc) under cursor
   {
     "rhysd/git-messenger.vim",
