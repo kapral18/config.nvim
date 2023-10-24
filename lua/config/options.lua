@@ -11,3 +11,6 @@ vim.opt.pumblend = 0 -- disable transparency in popup menu
 -- https://vi.stackexchange.com/a/5318/12823
 vim.g.matchparen_timeout = 2
 vim.g.matchparen_insert_timeout = 2
+
+-- custom dockerfile filetype association
+vim.filetype.add({ pattern = { ["Dockerfile.*"] = "dockerfile" } })
