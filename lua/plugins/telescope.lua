@@ -18,7 +18,7 @@ return {
       "<leader><space>",
       function()
         local telescope_builtin = require("telescope.builtin")
-        telescope_builtin["find_files"]({ no_ignore = true, hidden = true, default_text = "" })
+        telescope_builtin["find_files"]({ no_ignore = false, hidden = false, default_text = "" })
       end,
       desc = "Find Files",
     },
@@ -67,8 +67,8 @@ return {
     end
 
     local defaults = {
-      hidden = true,
-      no_ignore = true,
+      hidden = false,
+      no_ignore = false,
     }
 
     local toggle_no_ignore = (function()
