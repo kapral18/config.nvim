@@ -5,9 +5,8 @@ return {
     lazy = true,
     cmd = { "InlineEdit" },
     keys = {
-      { "<leader>ce", "<cmd>InlineEdit<cr>", desc = "Inline Edit (JS inside <script> html)" },
+      { "<leader>ce", "<cmd>InlineEdit<cr>", desc = "Inline Edit (for ex. JS inside <script> html)" },
     },
-    config = true,
     init = function()
       vim.g.inline_edit_autowrite = 1 -- Automatically save target buffer as well when buffer is saved
     end,
