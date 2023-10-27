@@ -2,6 +2,11 @@ local Util = require("lazyvim.util")
 
 return {
   "akinsho/bufferline.nvim",
+  opts = {
+    options = {
+      separator_style = "slant",
+    },
+  },
   init = function()
     if Util.has("bufferline.nvim") then
       vim.keymap.set(
