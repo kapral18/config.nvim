@@ -5,9 +5,6 @@ return {
     {
       "nvim-telescope/telescope-live-grep-args.nvim",
     },
-    {
-      "nvim-telescope/telescope-fzf-writer.nvim",
-    },
   },
   keys = {
     { "<leader>gb", ":Telescope git_branches<CR>", desc = "Branches" },
@@ -21,7 +18,7 @@ return {
       "<leader><space>",
       function()
         local telescope_builtin = require("telescope.builtin")
-        telescope_builtin["find_files"]({ no_ignore = false, hidden = false, default_text = "" })
+        telescope_builtin["find_files"]({ no_ignore = true, hidden = true, default_text = "" })
       end,
       desc = "Find Files",
     },
@@ -70,8 +67,8 @@ return {
     end
 
     local defaults = {
-      hidden = false,
-      no_ignore = false,
+      hidden = true,
+      no_ignore = true,
     }
 
     local toggle_no_ignore = (function()
@@ -177,6 +174,8 @@ return {
         "--line-number",
         "--column",
         "--smart-case",
+        "--no-ignore",
+        "--hidden",
       },
       path_display = {
         truncate = 3,
@@ -236,10 +235,6 @@ return {
           },
         },
       },
-      fzf_writer = {
-        minimum_grep_characters = 2,
-        minimum_files_characters = 2,
-      },
     })
   end,
   init = function()
@@ -249,7 +244,5 @@ return {
     local telescope = require("telescope")
     telescope.setup(opts)
     telescope.load_extension("live_grep_args")
-    telescope.load_extension("fzf")
-    telescope.load_extension("fzf_writer")
   end,
 }
