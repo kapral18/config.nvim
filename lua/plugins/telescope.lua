@@ -5,6 +5,9 @@ return {
     {
       "nvim-telescope/telescope-live-grep-args.nvim",
     },
+    {
+      "nvim-telescope/telescope-fzf-writer.nvim",
+    },
   },
   keys = {
     { "<leader>gb", ":Telescope git_branches<CR>", desc = "Branches" },
@@ -143,7 +146,29 @@ return {
       end
     end)()
 
+    local previewers = require("telescope.previewers")
+    local Job = require("plenary.job")
+    local new_maker = function(filepath, bufnr, opts)
+      filepath = vim.fn.expand(filepath)
+      Job:new({
+        command = "file",
+        args = { "--mime-type", "-b", filepath },
+        on_exit = function(j)
+          local mime_type = vim.split(j:result()[1], "/")[1]
+          if mime_type == "text" or string.match(mime_type, "^image") then
+            previewers.buffer_previewer_maker(filepath, bufnr, opts)
+          else
+            -- maybe we want to write something to the buffer here
+            vim.schedule(function()
+              vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, { "BINARY" })
+            end)
+          end
+        end,
+      }):sync()
+    end
+
     opts.defaults = vim.tbl_deep_extend("force", opts.defaults, {
+      buffer_previewer_maker = new_maker,
       vimgrep_arguments = {
         "rg",
         "--color=never",
@@ -161,6 +186,28 @@ return {
         filesize_limit = 1,
         tmeout = 100,
         treesitter = true,
+        mime_hook = function(filepath, bufnr, opts)
+          local is_image = function(filepath)
+            local image_extensions = { "png", "jpg", "jpeg", "webp", "avif" } -- Supported image formats
+            local split_path = vim.split(filepath:lower(), ".", { plain = true })
+            local extension = split_path[#split_path]
+            return vim.tbl_contains(image_extensions, extension)
+          end
+          if is_image(filepath) then
+            local term = vim.api.nvim_open_term(bufnr, {})
+            local function send_output(_, data, _)
+              for _, d in ipairs(data) do
+                vim.api.nvim_chan_send(term, d .. "\r\n")
+              end
+            end
+            vim.fn.jobstart({
+              "catimg",
+              filepath, -- Terminal image viewer command
+            }, { on_stdout = send_output, stdout_buffered = true, pty = true })
+          else
+            require("telescope.previewers.utils").set_preview_message(bufnr, opts.winid, "Binary cannot be previewed")
+          end
+        end,
       },
       layout_config = {
         height = 0.95,
@@ -188,10 +235,10 @@ return {
             ["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
           },
         },
-        -- ... also accepts theme settings, for example:
-        -- theme = "dropdown", -- use dropdown theme
-        -- theme = { }, -- use own theme spec
-        -- layout_config = { mirror=true }, -- mirror preview pane
+      },
+      fzf_writer = {
+        minimum_grep_characters = 2,
+        minimum_files_characters = 2,
       },
     })
   end,
@@ -203,5 +250,6 @@ return {
     telescope.setup(opts)
     telescope.load_extension("live_grep_args")
     telescope.load_extension("fzf")
+    telescope.load_extension("fzf_writer")
   end,
 }
