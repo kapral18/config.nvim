@@ -149,14 +149,14 @@ M.spec = {
       {
         "<leader>ss",
         M.fzf("lsp_document_symbols", {
-          winopts = M.win_presets.medium.flex,
+          winopts = M.win_presets.large.vertical,
         }),
         desc = "Document Symbols",
       },
       {
         "<leader>sS",
         M.fzf("lsp_live_workspace_symbols", {
-          winopts = M.win_presets.medium.flex,
+          winopts = M.win_presets.large.vertical,
         }),
         desc = "Workspace Symbols",
       },
@@ -170,10 +170,38 @@ M.spec = {
       {
         "<leader>sg",
         M.fzf("live_grep_native", {
+          rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=512 --hidden --no-ignore -g '!{.git,node_modules}/'",
           winopts = M.win_presets.large.vertical,
         }),
-        desc = "Grep",
+        desc = "Grep (excluding .git and node_modules)",
       },
+      {
+        "<leader>sG",
+        M.fzf("live_grep_native", {
+          rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=512 --hidden --no-ignore -g '!{.git}/'",
+          winopts = M.win_presets.large.vertical,
+        }),
+        desc = "Grep (excluding .git)",
+      },
+      -- { '<leader>s"', "<cmd>Telescope registers<cr>", desc = "Registers" },
+      -- { "<leader>sa", "<cmd>Telescope autocommands<cr>", desc = "Auto Commands" },
+      -- { "<leader>sb", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Buffer" },
+      -- { "<leader>sc", "<cmd>Telescope command_history<cr>", desc = "Command History" },
+      -- { "<leader>sC", "<cmd>Telescope commands<cr>", desc = "Commands" },
+      -- { "<leader>sd", "<cmd>Telescope diagnostics bufnr=0<cr>", desc = "Document diagnostics" },
+      -- { "<leader>sD", "<cmd>Telescope diagnostics<cr>", desc = "Workspace diagnostics" },
+      { "<leader>sh", M.fzf("help_tags", { winopts = M.win_presets.large.vertical }), desc = "Help Pages" },
+      -- { "<leader>sH", "<cmd>Telescope highlights<cr>", desc = "Search Highlight Groups" },
+      { "<leader>sk", M.fzf("keymaps", { winops = M.win_presets.large.vertical }), desc = "Key Maps" },
+      -- { "<leader>sM", "<cmd>Telescope man_pages<cr>", desc = "Man Pages" },
+      -- { "<leader>sm", "<cmd>Telescope marks<cr>", desc = "Jump to Mark" },
+      -- { "<leader>so", "<cmd>Telescope vim_options<cr>", desc = "Options" },
+      -- { "<leader>sR", "<cmd>Telescope resume<cr>", desc = "Resume" },
+      -- { "<leader>sw", Util.telescope("grep_string", { word_match = "-w" }), desc = "Word (root dir)" },
+      -- { "<leader>sW", Util.telescope("grep_string", { cwd = false, word_match = "-w" }), desc = "Word (cwd)" },
+      -- { "<leader>sw", Util.telescope("grep_string"), mode = "v", desc = "Selection (root dir)" },
+      -- { "<leader>sW", Util.telescope("grep_string", { cwd = false }), mode = "v", desc = "Selection (cwd)" },
+      -- { "<leader>uC", Util.telescope("colorscheme", { enable_preview = true }), desc = "Colorscheme with preview" },
     },
     opts = function()
       local actions = require("fzf-lua.actions")

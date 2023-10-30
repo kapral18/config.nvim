@@ -54,3 +54,34 @@ aucmd("BufReadPost", {
   end,
   desc = "Restore folds on buffer enter",
 })
+
+-- extract close_qith_q patterns from lazyvim_close_with_q autocmd group
+-- and set them to ouse own autocmd group and then delete the lazyvim_close_with_q group
+local close_with_q = vim.api.nvim_get_autocmds({ group = "lazyvim_close_with_q", event = "FileType" })
+
+local M = {}
+for _, autocmd in ipairs(close_with_q) do
+  if autocmd.event == "FileType" then
+    table.insert(M, autocmd.pattern)
+  end
+end
+
+vim.api.nvim_del_augroup_by_name("lazyvim_close_with_q")
+
+aucmd("FileType", {
+  group = "k18",
+  -- merge patterns with the new ones
+  pattern = vim.tbl_flatten({
+    M,
+    "ObsidianBacklinks",
+    "aerial-nav",
+    "chatpgpt",
+    "diagmsg",
+    "fzf",
+    "neotest-output",
+  }),
+  callback = function(event)
+    vim.bo[event.buf].buflisted = false
+    vim.keymap.set("n", "q", "<cmd>close<CR>", { buffer = event.buf, silent = true })
+  end,
+})

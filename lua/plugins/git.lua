@@ -17,18 +17,12 @@ return {
   {
     "aaronhallaert/advanced-git-search.nvim",
     config = function()
-      require("telescope").setup({
-        extensions = {
-          advanced_git_search = {
-            -- See Config    -- fugitive or diffview
-            diff_plugin = "diffview",
-          },
-        },
+      require("advanced_git_search.fzf").setup({
+        diff_plugin = "diffview.nvim",
       })
-      require("telescope").load_extension("advanced_git_search")
     end,
     dependencies = {
-      "nvim-telescope/telescope.nvim",
+      "ibhagwan/fzf-lua",
       -- to show diff splits and open commits in browser
       "tpope/vim-fugitive",
       -- to open commits in browser with fugitive
