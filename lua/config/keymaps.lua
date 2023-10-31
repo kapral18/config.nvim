@@ -65,3 +65,7 @@ vim.keymap.set({ "n", "t" }, "<C-S-Up>", "<cmd>resize -2<cr>", { desc = "Increas
 vim.keymap.set({ "n", "t" }, "<C-S-Down>", "<cmd>resize +2<cr>", { desc = "Decrease window height" })
 vim.keymap.set({ "n", "t" }, "<C-S-Left>", "<cmd>vertical resize +2<cr>", { desc = "Increase window width" })
 vim.keymap.set({ "n", "t" }, "<C-S-Right>", "<cmd>vertical resize -2<cr>", { desc = "Decrase window width" })
+
+-- overwrite lazyterm with toggleterm
+-- map("n", "<c-/>", lazyterm, { desc = "Terminal (root dir)" })
+vim.keymap.set("n", "<c-/>", "<cmd>ToggleTerm direction=float<cr>", { desc = "Terminal" })

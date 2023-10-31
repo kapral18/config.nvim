@@ -170,7 +170,7 @@ M.spec = {
       {
         "<leader>sg",
         M.fzf("live_grep_native", {
-          rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=512 --hidden --no-ignore -g '!{.git,node_modules}/'",
+          rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=512 --hidden --no-ignore -g '!{.git,node_modules,.next,dist,build}/'",
           winopts = M.win_presets.large.vertical,
         }),
         desc = "Grep (excluding .git and node_modules)",
@@ -183,25 +183,39 @@ M.spec = {
         }),
         desc = "Grep (excluding .git)",
       },
-      -- { '<leader>s"', "<cmd>Telescope registers<cr>", desc = "Registers" },
-      -- { "<leader>sa", "<cmd>Telescope autocommands<cr>", desc = "Auto Commands" },
-      -- { "<leader>sb", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Buffer" },
-      -- { "<leader>sc", "<cmd>Telescope command_history<cr>", desc = "Command History" },
-      -- { "<leader>sC", "<cmd>Telescope commands<cr>", desc = "Commands" },
-      -- { "<leader>sd", "<cmd>Telescope diagnostics bufnr=0<cr>", desc = "Document diagnostics" },
-      -- { "<leader>sD", "<cmd>Telescope diagnostics<cr>", desc = "Workspace diagnostics" },
+      { '<leader>s"', M.fzf("registers", { winopts = M.win_presets.large.vertical }), desc = "Registers" },
+      { "<leader>sa", M.fzf("autocmds", { winopts = M.win_presets.large.vertical }), desc = "Auto Commands" },
+      { "<leader>sc", M.fzf("command_history", { winopts = M.win_presets.large.vertical }), desc = "Command History" },
+      { "<leader>sC", M.fzf("commands", { winopts = M.win_presets.large.vertical }), desc = "Commands" },
+      {
+        "<leader>sd",
+        M.fzf("diagnostics_document", { winopts = M.win_presets.large.vertical }),
+        desc = "Document Diagnostics",
+      },
+      {
+        "<leader>sD",
+        M.fzf("diagnostics_workspace", { winopts = M.win_presets.large.vertical }),
+        desc = "Workspace Diagnostics",
+      },
       { "<leader>sh", M.fzf("help_tags", { winopts = M.win_presets.large.vertical }), desc = "Help Pages" },
-      -- { "<leader>sH", "<cmd>Telescope highlights<cr>", desc = "Search Highlight Groups" },
+      {
+        "<leader>sH",
+        M.fzf("highlights", { winopts = M.win_presets.large.vertical }),
+        desc = "Search Highlight Groups",
+      },
       { "<leader>sk", M.fzf("keymaps", { winops = M.win_presets.large.vertical }), desc = "Key Maps" },
-      -- { "<leader>sM", "<cmd>Telescope man_pages<cr>", desc = "Man Pages" },
-      -- { "<leader>sm", "<cmd>Telescope marks<cr>", desc = "Jump to Mark" },
+      { "<leader>sm", M.fzf("marks", { winopts = M.win_presets.large.vertical }), desc = "Marks" },
+      { "<leader>sM", M.fzf("man_pages", { winopts = M.win_presets.large.vertical }), desc = "Man Pages" },
       -- { "<leader>so", "<cmd>Telescope vim_options<cr>", desc = "Options" },
-      -- { "<leader>sR", "<cmd>Telescope resume<cr>", desc = "Resume" },
-      -- { "<leader>sw", Util.telescope("grep_string", { word_match = "-w" }), desc = "Word (root dir)" },
-      -- { "<leader>sW", Util.telescope("grep_string", { cwd = false, word_match = "-w" }), desc = "Word (cwd)" },
-      -- { "<leader>sw", Util.telescope("grep_string"), mode = "v", desc = "Selection (root dir)" },
-      -- { "<leader>sW", Util.telescope("grep_string", { cwd = false }), mode = "v", desc = "Selection (cwd)" },
-      -- { "<leader>uC", Util.telescope("colorscheme", { enable_preview = true }), desc = "Colorscheme with preview" },
+      { "<leader>sR", M.fzf("resume", { winopts = M.win_presets.large.vertical }), desc = "Resume Picker List" },
+      { "<leader>sw", M.fzf("grep_cword"), desc = "Grep Word" },
+      { "<leader>sw", M.fzf("grep_visual"), mode = "v", desc = "Grep Visual" },
+      { "<leader>sW", M.fzf("grep_cWORD"), desc = "Grep WORD" },
+      {
+        "<leader>uC",
+        M.fzf("colorschemes", { winopts = M.win_presets.large.vertical }),
+        desc = "Colorscheme with preview",
+      },
     },
     opts = function()
       local actions = require("fzf-lua.actions")
@@ -410,7 +424,7 @@ M.spec = {
           git_icons = true, -- show git icons?
           file_icons = true, -- show file icons?
           color_icons = true, -- colorize file|git icons
-          rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=512 --hidden --no-ignore -g '!{.git,node_modules}/'",
+          rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=512 --hidden --no-ignore -g '!{.git,node_modules,.next,dist,build}/'",
           grep_opts = "--binary-files=without-match --line-number --recursive --color=auto --perl-regexp",
           -- 'live_grep_glob' options:
           glob_flag = "--iglob", -- for case sensitive globs use '--glob'

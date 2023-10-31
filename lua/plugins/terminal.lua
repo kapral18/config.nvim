@@ -4,6 +4,7 @@ local terminal_size = 20
 return {
   {
     "akinsho/toggleterm.nvim",
+    lazy = false,
     opts = {
       size = function(term)
         if term.direction == "horizontal" then
