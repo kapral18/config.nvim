@@ -65,34 +65,34 @@ M.spec = {
       local keys = require("lazyvim.plugins.lsp.keymaps").get()
       keys[#keys + 1] = {
         "gd",
-        M.fzf("lsp_definitions", { jump_to_single_result = true, winopts = M.win_presets.medium.vertical }),
+        M.fzf("lsp_definitions", { jump_to_single_result = true, winopts = M.win_presets.large.vertical }),
         desc = "Goto Definition",
         has = "definition",
       }
       keys[#keys + 1] = {
         "gd",
-        M.fzf("lsp_definitions", { jump_to_single_result = true, winopts = M.win_presets.medium.vertical }),
+        M.fzf("lsp_definitions", { jump_to_single_result = true, winopts = M.win_presets.large.vertical }),
         desc = "Goto Definition",
         has = "definition",
       }
       keys[#keys + 1] = {
         "gr",
-        M.fzf("lsp_references", { ignore_current_line = true, winopts = M.win_presets.medium.vertical }),
+        M.fzf("lsp_references", { ignore_current_line = true, winopts = M.win_presets.large.vertical }),
         desc = "References",
       }
       keys[#keys + 1] = {
         "gI",
-        M.fzf("lsp_implementations", { jump_to_single_result = true, winopts = M.win_presets.medium.vertical }),
+        M.fzf("lsp_implementations", { jump_to_single_result = true, winopts = M.win_presets.large.vertical }),
         desc = "Goto Implementation",
       }
       keys[#keys + 1] = {
         "gy",
-        M.fzf("lsp_typedefs", { jump_to_single_result = true, winopts = M.win_presets.medium.vertical }),
+        M.fzf("lsp_typedefs", { jump_to_single_result = true, winopts = M.win_presets.large.vertical }),
         desc = "Goto T[y]pe Definition",
       }
       keys[#keys + 1] = {
         "gD",
-        M.fzf("lsp_declarations", { jump_to_single_result = true, winopts = M.win_presets.medium.vertical }),
+        M.fzf("lsp_declarations", { jump_to_single_result = true, winopts = M.win_presets.large.vertical }),
         desc = "Goto Declarations",
       }
       keys[#keys + 1] = {
@@ -208,9 +208,14 @@ M.spec = {
       { "<leader>sM", M.fzf("man_pages", { winopts = M.win_presets.large.vertical }), desc = "Man Pages" },
       -- { "<leader>so", "<cmd>Telescope vim_options<cr>", desc = "Options" },
       { "<leader>sR", M.fzf("resume", { winopts = M.win_presets.large.vertical }), desc = "Resume Picker List" },
-      { "<leader>sw", M.fzf("grep_cword"), desc = "Grep Word" },
-      { "<leader>sw", M.fzf("grep_visual"), mode = "v", desc = "Grep Visual" },
-      { "<leader>sW", M.fzf("grep_cWORD"), desc = "Grep WORD" },
+      { "<leader>sw", M.fzf("grep_cword", { winopts = M.win_presets.large.vertical }), desc = "Grep Word" },
+      {
+        "<leader>sw",
+        M.fzf("grep_visual", { winopts = M.win_presets.large.vertical }),
+        mode = "v",
+        desc = "Grep Visual",
+      },
+      { "<leader>sW", M.fzf("grep_cWORD", { winopts = M.win_presets.large.vertical }), desc = "Grep WORD" },
       {
         "<leader>uC",
         M.fzf("colorschemes", { winopts = M.win_presets.large.vertical }),
@@ -236,7 +241,7 @@ M.spec = {
           preview = {
             default = "bat",
             border = "noborder", -- border|noborder, applies only to
-            wrap = "nowrap", -- wrap|nowrap
+            wrap = "wrap", -- wrap|nowrap
             hidden = "nohidden", -- hidden|nohidden
             vertical = "down:45%", -- up|down:size
             horizontal = "right:60%", -- right|left:size
@@ -298,7 +303,7 @@ M.spec = {
           ["--info"] = "inline",
           ["--height"] = "100%",
           ["--layout"] = "reverse",
-          ["--keep-right"] = "",
+          ["--keep-right"] = false,
         },
         previewers = {
           cat = {
