@@ -221,6 +221,11 @@ M.spec = {
         M.fzf("colorschemes", { winopts = M.win_presets.large.vertical }),
         desc = "Colorscheme with preview",
       },
+      {
+        "<leader>sb",
+        M.fzf("buffers", { winopts = M.win_presets.large.vertical }),
+        desc = "Buffers with preview",
+      },
     },
     opts = function()
       local actions = require("fzf-lua.actions")
