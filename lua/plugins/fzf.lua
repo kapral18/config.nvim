@@ -170,7 +170,7 @@ M.spec = {
       {
         "<leader>sg",
         M.fzf("live_grep_native", {
-          rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=512 --hidden --no-ignore -g '!{.git,node_modules,.next,dist,build}/'",
+          rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=512 --hidden --no-ignore -g '!{.git,node_modules,.next,dist,build,reports,.idea,.vscode,.nyc_output}/'",
           winopts = M.win_presets.large.vertical,
         }),
         desc = "Grep (excluding .git and node_modules)",
@@ -244,7 +244,7 @@ M.spec = {
             help_border = "FloatBorder", -- <F1> window border
           },
           preview = {
-            default = "bat",
+            -- default = "bat",
             border = "noborder", -- border|noborder, applies only to
             wrap = "wrap", -- wrap|nowrap
             hidden = "nohidden", -- hidden|nohidden
@@ -279,6 +279,8 @@ M.spec = {
         },
         keymap = {
           builtin = {
+            ["down"] = "down",
+            ["up"] = "up",
             ["<F1>"] = "toggle-help",
             ["<F2>"] = "toggle-fullscreen",
 
@@ -291,6 +293,8 @@ M.spec = {
             ["<C-u>"] = "preview-page-up",
           },
           fzf = {
+            ["down"] = "down",
+            ["up"] = "up",
             ["ctrl-c"] = "abort",
             ["ctrl-a"] = "toggle-all",
             ["ctrl-q"] = "select-all+accept",
@@ -434,7 +438,7 @@ M.spec = {
           git_icons = true, -- show git icons?
           file_icons = true, -- show file icons?
           color_icons = true, -- colorize file|git icons
-          rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=512 --hidden --no-ignore -g '!{.git,node_modules,.next,dist,build}/'",
+          rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=512 --hidden --no-ignore -g '!{.git,node_modules,.next,dist,build,reports,.idea,.vscode,.nyc_output}/'",
           grep_opts = "--binary-files=without-match --line-number --recursive --color=auto --perl-regexp",
           -- 'live_grep_glob' options:
           glob_flag = "--iglob", -- for case sensitive globs use '--glob'
