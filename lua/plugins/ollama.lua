@@ -1,10 +1,21 @@
 return {
   "David-Kunz/gen.nvim",
   keys = {
-    { "<leader>]", ":Gen<CR>", mode = { "n", "v", "x" }, desc = "Local AI Gen" },
+    { "<leader>ai", ":Gen<CR>", mode = { "n", "v", "x" }, desc = "Local [AI]: Menu" },
+    {
+      "<leader>am",
+      function()
+        require("gen").select_model()
+      end,
+      mode = { "n" },
+      desc = "Local [AI]: Model",
+    },
   },
-  config = function()
-    -- require("gen").model = "phind-codellama:34b-v2"
-    require("gen").model = "codebooga"
-  end,
+  opts = {
+    model = "deepseek-coder:33b-instruct-q6_K",
+    display_mode = "float",
+    show_model = true,
+    no_serve = true,
+    debugCommand = true,
+  },
 }

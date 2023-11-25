@@ -58,7 +58,56 @@ end
 
 ---@type LazySpec
 M.spec = {
-  { "nvim-telescope/telescope.nvim", enabled = false },
+  {
+    "nvim-telescope/telescope.nvim",
+    keys = {
+
+      {
+        "<leader>,",
+        false,
+      },
+      { "<leader>/", false },
+      { "<leader>:", false },
+      { "<leader><space>", false },
+      { "<leader>fb", false },
+      { "<leader>fc", false },
+      { "<leader>ff", false },
+      { "<leader>fF", false },
+      { "<leader>fr", false },
+      { "<leader>fR", false },
+      { "<leader>gc", false },
+      { "<leader>gs", false },
+      { "<leader>s", false },
+      { "<leader>sa", false },
+      { "<leader>sb", false },
+      { "<leader>sc", false },
+      { "<leader>sC", false },
+      { "<leader>sd", false },
+      { "<leader>sD", false },
+      { "<leader>sg", false },
+      { "<leader>sG", false },
+      { "<leader>sh", false },
+      { "<leader>sH", false },
+      { "<leader>sk", false },
+      { "<leader>sM", false },
+      { "<leader>sm", false },
+      { "<leader>so", false },
+      { "<leader>sR", false },
+      { "<leader>sw", false },
+      { "<leader>sW", false },
+      { "<leader>sw", false },
+      { "<leader>sW", false },
+      { "<leader>uC", false },
+      {
+        "<leader>ss",
+        false,
+      },
+      {
+        "<leader>sS",
+        false,
+      },
+    },
+  },
   {
     "neovim/nvim-lspconfig",
     init = function()
@@ -170,7 +219,7 @@ M.spec = {
       {
         "<leader>sg",
         M.fzf("live_grep_native", {
-          rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=512 --hidden --no-ignore -g '!{.git,node_modules,.next,dist,build,reports,.idea,.vscode,.nyc_output}/'",
+          rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=512 --hidden --no-ignore -g '!{.git,node_modules,.next,dist,build,reports,.idea,.vscode,.nyc_output,__generated__}/'",
           winopts = M.win_presets.large.vertical,
         }),
         desc = "Grep (excluding .git and node_modules)",
@@ -438,7 +487,7 @@ M.spec = {
           git_icons = true, -- show git icons?
           file_icons = true, -- show file icons?
           color_icons = true, -- colorize file|git icons
-          rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=512 --hidden --no-ignore -g '!{.git,node_modules,.next,dist,build,reports,.idea,.vscode,.nyc_output}/'",
+          rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=512 --hidden --no-ignore -g '!{.git,node_modules,.next,dist,build,reports,.idea,.vscode,.nyc_output,__generated__}/'",
           grep_opts = "--binary-files=without-match --line-number --recursive --color=auto --perl-regexp",
           -- 'live_grep_glob' options:
           glob_flag = "--iglob", -- for case sensitive globs use '--glob'
