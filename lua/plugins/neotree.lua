@@ -22,6 +22,7 @@ end
 
 return {
   "nvim-neo-tree/neo-tree.nvim",
+  lazy = false,
   opts = {
     filesystem = {
       filtered_items = {
@@ -53,6 +54,7 @@ return {
         ["tf"] = "telescope_find",
         ["tg"] = "telescope_grep",
         ["D"] = "diff_files",
+        ["r"] = "git_rename",
       },
     },
     commands = {
@@ -93,6 +95,33 @@ return {
             require("neo-tree.ui.renderer").redraw(state)
           end
         end
+      end,
+      git_rename = function(state)
+        local node = state.tree:get_node()
+        if node.type == "message" then
+          return
+        end
+
+        local cmds = require("neo-tree.sources.filesystem.commands")
+        local has_git = vim.fn.finddir(".git", ";") ~= ""
+
+        if not has_git then
+          return cmds.rename(state)
+        end
+
+        local path = node:get_id()
+        local name = node.name
+        local events = require("neo-tree.events")
+        vim.ui.input({ prompt = "New name: " .. name }, function(new_name)
+          if new_name == "" then
+            return
+          end
+
+          local base_path = vim.fn.fnamemodify(path, ":h")
+          local cmd = { "git", "mv", path, base_path .. "/" .. new_name }
+          vim.fn.system(cmd)
+          events.fire_event(events.GIT_EVENT)
+        end)
       end,
     },
   },
