@@ -56,6 +56,7 @@ return {
       mappings = {
         ["tf"] = "telescope_find",
         ["tg"] = "telescope_grep",
+        ["K"] = "focus_parent",
         ["D"] = "diff_files",
         ["r"] = "git_rename",
       },
@@ -70,6 +71,10 @@ return {
         local node = state.tree:get_node()
         local path = node:get_id()
         require("telescope.builtin").live_grep(getTelescopeOpts(state, path))
+      end,
+      focus_parent = function(state)
+        local node = state.tree:get_node()
+        require("neo-tree.ui.renderer").focus_node(state, node:get_parent_id())
       end,
       diff_files = function(state)
         local node = state.tree:get_node()

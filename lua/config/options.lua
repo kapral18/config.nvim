@@ -14,3 +14,7 @@ vim.g.matchparen_insert_timeout = 2
 
 -- custom dockerfile filetype association
 vim.filetype.add({ pattern = { ["Dockerfile.*"] = "dockerfile" } })
+
+-- switch off regex syntax highlighting
+-- to detect missing treesitter support
+vim.cmd("syntax off")

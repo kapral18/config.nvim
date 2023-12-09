@@ -2,6 +2,8 @@ return {
   -- Disable certain features if file is big
   {
     "LunarVim/bigfile.nvim",
-    opts = {},
+    opts = {
+      filesize = 0.5,
+    },
   },
 }
