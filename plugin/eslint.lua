@@ -19,7 +19,6 @@ local function get_extends_path(node_modules_path, str)
         local found = vim.fs.find(config_version .. ".js", { path = starting_path })
         if vim.tbl_isempty(found) then
           vim.notify("No version found, serving package.json instead", vim.log.levels.WARN)
-
           return vim.fs.joinpath(starting_path, "package.json")
         end
 
@@ -47,7 +46,6 @@ local function get_extends_path(node_modules_path, str)
   if vim.startswith(str, "eslint:") then
     return vim.fs.joinpath(resulting_path, "eslint", "package.json")
   end
-
   local separator = string.find(str, ":")
   local config_name = str
 
@@ -66,6 +64,59 @@ local function get_plugins_path(node_modules_path, str)
   end
 
   return vim.fs.joinpath(resulting_path, "eslint-plugin-" .. str, "package.json")
+end
+
+local function get_rules_path(node_modules_path, str)
+  local config_parts = vim.split(str, "/")
+  local rule_scope = config_parts[1]
+  local rule_name = config_parts[2]
+
+  local found_rules = vim.fs.find((rule_name or rule_scope) .. ".js", { path = node_modules_path, limit = math.huge })
+
+  if vim.tbl_isempty(found_rules) then
+    if vim.startswith(rule_scope, "@") then
+      local found_dir =
+        vim.fs.find("package.json", { path = vim.fs.joinpath(node_modules_path, rule_scope), limit = math.huge })
+      if #found_dir > 0 then
+        return found_dir[1]
+      end
+    end
+
+    if rule_scope ~= nil and rule_name ~= nil then
+      local found_dir = vim.fs.find("package.json", {
+        path = vim.fs.joinpath(node_modules_path, "eslint-plugin-" .. rule_scope),
+        limit = math.huge,
+      })
+      if #found_dir > 0 then
+        print("here")
+        return found_dir[1]
+      end
+    end
+
+    vim.notify("No rule found", vim.log.levels.WARN)
+    return
+  end
+
+  if #found_rules > 1 then
+    vim.ui.select(found_rules, {
+      prompt = "Select rule",
+      format_item = function(item)
+        -- strip off absolute path, only keep relative path from root
+        return vim.fn.fnamemodify(item, ":.")
+      end,
+    }, function(selected)
+      if not selected then
+        vim.notify("No rule selected", vim.log.levels.WARN)
+        return
+      end
+
+      vim.cmd("edit " .. selected)
+    end)
+
+    return
+  end
+
+  return found_rules[1]
 end
 
 local function get_eslint_path()
@@ -123,6 +174,9 @@ local function get_eslint_path()
         end
         if name == "plugins" then
           return get_plugins_path(node_modules_path, cursor_node_text)
+        end
+        if name == "rules" then
+          return get_rules_path(node_modules_path, cursor_node_text)
         end
       end
     end
