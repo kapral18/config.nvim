@@ -16,9 +16,9 @@ aucmd({ "FileType" }, {
 
 aucmd({ "FileType" }, {
   group = "k18",
-  pattern = { "markdown" },
+  pattern = { "kdl" },
   callback = function()
-    vim.wo.spell = true
+    vim.bo.commentstring = "//%s"
   end,
 })
 

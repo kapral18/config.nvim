@@ -18,7 +18,7 @@ local function get_extends_path(node_modules_path, str)
       if config_version ~= nil then
         local found = vim.fs.find(config_version .. ".js", { path = starting_path })
         if vim.tbl_isempty(found) then
-          vim.notify("No version found, serving package.json instead", vim.log.levels.WARN)
+          vim.notify("No version found, serving package.json instead", vim.log.levels.INFO)
           return vim.fs.joinpath(starting_path, "package.json")
         end
 
@@ -34,7 +34,7 @@ local function get_extends_path(node_modules_path, str)
         { path = vim.fs.joinpath(resulting_path, "eslint-plugin-" .. config_name) }
       )
       if vim.tbl_isempty(found) then
-        vim.notify("No version found serving package.json", vim.log.levels.WARN)
+        vim.notify("No version found serving package.json", vim.log.levels.INFO)
         return vim.fs.joinpath(resulting_path, "eslint-plugin-" .. config_name, "package.json")
       end
       return found[1]
@@ -88,7 +88,6 @@ local function get_rules_path(node_modules_path, str)
         limit = math.huge,
       })
       if #found_dir > 0 then
-        print("here")
         return found_dir[1]
       end
     end

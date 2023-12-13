@@ -49,6 +49,13 @@ M.win_presets = {
   },
 }
 
+M.rg_opts_with_ignored =
+  "--column --line-number --no-heading --color=always --smart-case --max-columns=512 --hidden --no-ignore -g '!.git'"
+
+M.rg_opts = M.rg_opts_with_ignored
+  .. " "
+  .. "-g '!{node_modules,.next,dist,build,reports,.idea,.vscode,.yarn,.nyc_output,__generated__}/'"
+
 M.fzf = function(cmd, opts)
   opts = opts or {}
   return function()
@@ -218,16 +225,15 @@ M.spec = {
       },
       {
         "<leader>sg",
-        M.fzf("live_grep_native", {
-          rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=512 --hidden --no-ignore -g '!{.git,node_modules,.next,dist,build,reports,.idea,.vscode,.nyc_output,__generated__}/'",
+        M.fzf("live_grep_glob", {
           winopts = M.win_presets.large.vertical,
         }),
         desc = "Grep (excluding .git and node_modules)",
       },
       {
         "<leader>sG",
-        M.fzf("live_grep_native", {
-          rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=512 --hidden --no-ignore -g '!{.git}/'",
+        M.fzf("live_grep_glob", {
+          rg_opts = M.rg_opts_with_ignored,
           winopts = M.win_presets.large.vertical,
         }),
         desc = "Grep (excluding .git)",
@@ -252,19 +258,41 @@ M.spec = {
         M.fzf("highlights", { winopts = M.win_presets.large.vertical }),
         desc = "Search Highlight Groups",
       },
-      { "<leader>sk", M.fzf("keymaps", { winops = M.win_presets.large.vertical }), desc = "Key Maps" },
       { "<leader>sm", M.fzf("marks", { winopts = M.win_presets.large.vertical }), desc = "Marks" },
+      { "<leader>sk", M.fzf("keymaps", { winops = M.win_presets.large.vertical }), desc = "Key Maps" },
       { "<leader>sM", M.fzf("man_pages", { winopts = M.win_presets.large.vertical }), desc = "Man Pages" },
       -- { "<leader>so", "<cmd>Telescope vim_options<cr>", desc = "Options" },
       { "<leader>sR", M.fzf("resume", { winopts = M.win_presets.large.vertical }), desc = "Resume Picker List" },
-      { "<leader>sw", M.fzf("grep_cword", { winopts = M.win_presets.large.vertical }), desc = "Grep Word" },
       {
         "<leader>sw",
-        M.fzf("grep_visual", { winopts = M.win_presets.large.vertical }),
-        mode = "v",
-        desc = "Grep Visual",
+        M.fzf("grep_cword", { winopts = M.win_presets.large.vertical }),
+        desc = "Grep Word (excluding .git and node_modules)",
       },
-      { "<leader>sW", M.fzf("grep_cWORD", { winopts = M.win_presets.large.vertical }), desc = "Grep WORD" },
+      {
+        "<leader>sw",
+        M.fzf("grep_visual", {
+          winopts = M.win_presets.large.vertical,
+        }),
+        mode = "v",
+        desc = "Grep Visual (excluding .git and node_modules)",
+      },
+      {
+        "<leader>sW",
+        M.fzf("grep_cword", {
+          rg_opts = M.rg_opts_with_ignored,
+          winopts = M.win_presets.large.vertical,
+        }),
+        desc = "Grep Word (excluding .git)",
+      },
+      {
+        "<leader>sW",
+        M.fzf("grep_visual", {
+          rg_opts = M.rg_opts_with_ignored,
+          winopts = M.win_presets.large.vertical,
+        }),
+        mode = "v",
+        desc = "Grep Visual (excluding .git)",
+      },
       {
         "<leader>uC",
         M.fzf("colorschemes", { winopts = M.win_presets.large.vertical }),
@@ -404,8 +432,8 @@ M.spec = {
           git_icons = true, -- show git icons?
           file_icons = true, -- show file icons?
           color_icons = true, -- colorize file|git icons
-          find_opts = [[-type f -not -path '*/\.git/*' -printf '%P\n']],
-          rg_opts = "--color=never --files --hidden --follow -g '!.git'",
+          find_opts = "-type f -not -path '*/.git/*' -printf '%P\n'",
+          rg_opts = M.rg_opts,
           fd_opts = "--color=never --type f --hidden --follow --exclude .git",
           actions = {
             ["default"] = actions.file_edit_or_qf,
@@ -487,7 +515,7 @@ M.spec = {
           git_icons = true, -- show git icons?
           file_icons = true, -- show file icons?
           color_icons = true, -- colorize file|git icons
-          rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=512 --hidden --no-ignore -g '!{.git,node_modules,.next,dist,build,reports,.idea,.vscode,.nyc_output,__generated__}/'",
+          rg_opts = M.rg_opts,
           grep_opts = "--binary-files=without-match --line-number --recursive --color=auto --perl-regexp",
           -- 'live_grep_glob' options:
           glob_flag = "--iglob", -- for case sensitive globs use '--glob'

@@ -12,7 +12,6 @@ end
 return {
   {
     "nvim-treesitter/nvim-treesitter",
-    init = function() end,
     keys = {
       getRepeatableKey(";", "repeat_last_move"),
       getRepeatableKey(",", "repeat_last_move_opposite"),
@@ -22,8 +21,8 @@ return {
       getRepeatableKey("t", "builtin_t"),
       getRepeatableKey("T", "builtin_T"),
     },
-    opts = {
-      textobjects = {
+    opts = function(_, opts)
+      opts.textobjects = vim.tbl_extend("force", opts.textobjects, {
         select = {
           enable = true,
 
@@ -112,8 +111,8 @@ return {
             ["[L"] = { query = "@loop.outer", desc = "Prev loop end" },
           },
         },
-      },
-    },
+      })
+    end,
   },
   {
     "nvim-treesitter/nvim-treesitter-context",
