@@ -1,18 +1,18 @@
 return {
   "David-Kunz/gen.nvim",
   keys = {
-    { "<leader>ai", ":Gen<CR>", mode = { "n", "v", "x" }, desc = "Local [AI]: Menu" },
+    { "<leader>ola", ":Gen<CR>", mode = { "n", "v", "x" }, desc = "Local [Ol]l[a]ma: Menu" },
     {
-      "<leader>am",
+      "<leader>olm",
       function()
         require("gen").select_model()
       end,
       mode = { "n" },
-      desc = "Local [AI]: Model",
+      desc = "Local [Ol]lama: [M]odel",
     },
   },
   opts = {
-    model = "deepseek-coder:33b-instruct-q6_K",
+    model = "codebooga:16k",
     display_mode = "float",
     show_model = true,
     no_serve = true,
