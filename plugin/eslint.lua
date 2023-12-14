@@ -18,34 +18,36 @@ local function get_extends_path(node_modules_path, str)
       if config_version ~= nil then
         local found = vim.fs.find(config_version .. ".js", { path = starting_path })
         if vim.tbl_isempty(found) then
-          vim.notify("No version found, serving package.json instead", vim.log.levels.INFO)
-          return vim.fs.joinpath(starting_path, "package.json")
+          return nil, starting_path
         end
 
-        return found[1]
+        return found[1], nil
       else
-        return vim.fs.joinpath(starting_path, "package.json")
+        return nil, starting_path
       end
     end
 
     if config_version ~= nil then
-      local found = vim.fs.find(
-        config_version .. ".js",
-        { path = vim.fs.joinpath(resulting_path, "eslint-plugin-" .. config_name) }
-      )
+      local starting_path = vim.fs.joinpath(resulting_path, "eslint-plugin-" .. config_name)
+      local found = vim.fs.find(config_version .. ".js", { path = starting_path })
       if vim.tbl_isempty(found) then
-        vim.notify("No version found serving package.json", vim.log.levels.INFO)
-        return vim.fs.joinpath(resulting_path, "eslint-plugin-" .. config_name, "package.json")
+        return nil, starting_path
       end
-      return found[1]
+      return found[1], nil
     else
-      return vim.fs.joinpath(resulting_path, "eslint-plugin-" .. config_name, "package.json")
+      return nil, vim.fs.joinpath(resulting_path, "eslint-plugin-" .. config_name)
     end
   end
 
   if vim.startswith(str, "eslint:") then
-    return vim.fs.joinpath(resulting_path, "eslint", "package.json")
+    local starting_path = vim.fs.joinpath(resulting_path, "eslint")
+    local found = vim.fs.find("package.json", { path = starting_path })
+    if vim.tbl_isempty(found) then
+      return nil, starting_path
+    end
+    return found[1], nil
   end
+
   local separator = string.find(str, ":")
   local config_name = str
 
@@ -53,17 +55,31 @@ local function get_extends_path(node_modules_path, str)
     config_name, _ = vim.split(str, ":")
   end
 
-  return vim.fs.joinpath(resulting_path, "eslint-config-" .. config_name, "package.json")
+  local starting_path = vim.fs.joinpath(resulting_path, "eslint-config-" .. config_name)
+  local found = vim.fs.find("package.json", { path = starting_path })
+  if vim.tbl_isempty(found) then
+    return nil, starting_path
+  end
+  return found[1], nil
 end
 
 local function get_plugins_path(node_modules_path, str)
   local resulting_path = node_modules_path
   if vim.startswith(str, "@") then
     local starting_path = vim.fs.joinpath(resulting_path, str, "eslint-plugin")
-    return vim.fs.joinpath(starting_path, "package.json")
+    local found = vim.fs.find("package.json", { path = starting_path })
+    if vim.tbl_isempty(found) then
+      return nil
+    end
+    return found[1]
   end
 
-  return vim.fs.joinpath(resulting_path, "eslint-plugin-" .. str, "package.json")
+  local starting_path = vim.fs.joinpath(resulting_path, "eslint-plugin-" .. str)
+  local found = vim.fs.find("package.json", { path = starting_path })
+  if vim.tbl_isempty(found) then
+    return nil
+  end
+  return found[1]
 end
 
 local function get_rules_path(node_modules_path, str)
@@ -92,8 +108,7 @@ local function get_rules_path(node_modules_path, str)
       end
     end
 
-    vim.notify("No rule found", vim.log.levels.WARN)
-    return
+    return nil
   end
 
   if #found_rules > 1 then
@@ -112,7 +127,7 @@ local function get_rules_path(node_modules_path, str)
       vim.cmd("edit " .. selected)
     end)
 
-    return
+    return false
   end
 
   return found_rules[1]
@@ -128,15 +143,15 @@ local function get_eslint_path()
 
   local git_dir = root_dir[1]
 
-  local node_modules =
-    vim.fs.find("node_modules", { upward = true, type = "directory", stop = git_dir, path = buf_dir })
+  local node_modules = vim.fs.find(
+    "node_modules",
+    { upward = true, type = "directory", stop = git_dir, path = buf_dir, limit = math.huge }
+  )
 
   if vim.tbl_isempty(node_modules) then
     vim.notify("No node_modules directory found", vim.log.levels.WARN)
     return
   end
-
-  local node_modules_path = node_modules[1]
 
   local cursor_row, cursor_col = unpack(vim.api.nvim_win_get_cursor(0))
   -- treesitter is 0 indexed
@@ -167,15 +182,60 @@ local function get_eslint_path()
       end
 
       if child:type() == "property_identifier" then
-        local name = vim.treesitter.get_node_text(child, bufnr)
-        if name == "extends" then
-          return get_extends_path(node_modules_path, cursor_node_text)
+        local eslint_key = vim.treesitter.get_node_text(child, bufnr)
+        if eslint_key == "extends" then
+          for i = 1, #node_modules do
+            local success_path, fallback_path = get_extends_path(node_modules[i], cursor_node_text)
+
+            if success_path then
+              return success_path
+            end
+
+            if i == #node_modules then
+              local found = vim.fs.find("package.json", { path = fallback_path })
+              if vim.tbl_isempty(found) then
+                vim.notify("No package.json found for config: " .. cursor_node_text, vim.log.levels.WARN)
+                return nil
+              end
+
+              vim.notify("No config found, defaulting to package.json for " .. cursor_node_text, vim.log.levels.INFO)
+              return found[1]
+            end
+          end
         end
-        if name == "plugins" then
-          return get_plugins_path(node_modules_path, cursor_node_text)
+
+        if eslint_key == "plugins" then
+          for i = 1, #node_modules do
+            local plugin_path = get_plugins_path(node_modules[i], cursor_node_text)
+
+            if plugin_path then
+              return plugin_path
+            end
+
+            if i == #node_modules then
+              vim.notify("No package.json found for plugin: " .. cursor_node_text, vim.log.levels.WARN)
+              return nil
+            end
+          end
         end
-        if name == "rules" then
-          return get_rules_path(node_modules_path, cursor_node_text)
+
+        if eslint_key == "rules" then
+          for i = 1, #node_modules do
+            local rule_path = get_rules_path(node_modules[i], cursor_node_text)
+
+            if rule_path == false then
+              return nil
+            end
+
+            if rule_path then
+              return rule_path
+            end
+
+            if i == #node_modules then
+              vim.notify("No rule found for " .. cursor_node_text, vim.log.levels.WARN)
+              return nil
+            end
+          end
         end
       end
     end
