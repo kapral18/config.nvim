@@ -135,9 +135,9 @@ end
 
 local function get_eslint_path()
   local buf_dir = vim.fs.dirname(vim.api.nvim_buf_get_name(0))
-  local root_dir = vim.fs.find(".git", { upward = true, type = "directory", path = buf_dir })
+  local root_dir = vim.fs.find({ ".git", "yarn.lock", "package-lock.json" }, { upward = true, path = buf_dir })
   if vim.tbl_isempty(root_dir) then
-    vim.notify("No git directory found", vim.log.levels.WARN)
+    vim.notify("No .git directory or yarn.lock or package-lock. found", vim.log.levels.WARN)
     return
   end
 
