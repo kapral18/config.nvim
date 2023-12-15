@@ -158,12 +158,13 @@ local function get_eslint_path()
   cursor_row = cursor_row - 1
 
   local bufnr = vim.api.nvim_get_current_buf()
-  local parser = vim.treesitter.get_parser(bufnr, "typescript")
+  local parser = vim.treesitter.get_parser(bufnr, vim.bo.filetype)
   local trees = parser:parse()
   local tree = trees[1]
   local root = tree:root()
 
   local cursor_node = root:descendant_for_range(cursor_row, cursor_col, cursor_row, cursor_col)
+
   if cursor_node == nil then
     vim.notify("Cursor was not within a node", vim.log.levels.WARN)
     return
@@ -172,8 +173,10 @@ local function get_eslint_path()
   local cursor_node_text = vim.treesitter.get_node_text(cursor_node, bufnr)
 
   local parent = cursor_node:parent()
+
   while parent ~= nil do
     local type = parent:type()
+
     if type == "pair" and parent:child_count() > 0 then
       local child = parent:child(0)
       if not child then
@@ -181,8 +184,15 @@ local function get_eslint_path()
         return
       end
 
-      if child:type() == "property_identifier" then
+      -- if it's either ecma property_identifier or json key string
+      if child:type() == "property_identifier" or child:type() == "string" then
         local eslint_key = vim.treesitter.get_node_text(child, bufnr)
+
+        -- json key is a "string" node, so we need to remove the quotes
+        if child:type() == "string" then
+          eslint_key = string.gsub(eslint_key, '"', "")
+        end
+
         if eslint_key == "extends" then
           for i = 1, #node_modules do
             local success_path, fallback_path = get_extends_path(node_modules[i], cursor_node_text)
