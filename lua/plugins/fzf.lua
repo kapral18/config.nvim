@@ -49,12 +49,17 @@ M.win_presets = {
   },
 }
 
-M.rg_opts_with_ignored =
+local rg_ignore_glob = "-g '!{node_modules,.next,dist,build,reports,.idea,.vscode,.yarn,.nyc_output,__generated__}/'"
+local fd_ignore_glob = "-E '{node_modules,.next,dist,build,reports,.idea,.vscode,.yarn,.nyc_output,__generated__}/'"
+
+M.rg_opts_unrestricted =
   "--column --line-number --no-heading --color=always --smart-case --max-columns=512 --hidden --no-ignore -g '!.git'"
 
-M.rg_opts = M.rg_opts_with_ignored
-  .. " "
-  .. "-g '!{node_modules,.next,dist,build,reports,.idea,.vscode,.yarn,.nyc_output,__generated__}/'"
+M.rg_opts = M.rg_opts_unrestricted .. " " .. rg_ignore_glob
+
+M.fd_opts_unrestricted = "--color=never --type f --hidden --no-ignore --follow -E '.git'"
+
+M.fd_opts = M.fd_opts_unrestricted .. " " .. fd_ignore_glob
 
 M.fzf = function(cmd, opts)
   opts = opts or {}
@@ -167,8 +172,16 @@ M.spec = {
     dependencies = { "nvim-tree/nvim-web-devicons" },
     keys = {
       {
-        "<leader><space>",
+        "<leader><Space>",
         M.fzf("files", {
+          winopts = M.win_presets.medium.vertical,
+        }),
+        desc = "Files",
+      },
+      {
+        "<leader><S-Space>",
+        M.fzf("files", {
+          fd_opts = M.fd_opts_unrestricted,
           winopts = M.win_presets.medium.vertical,
         }),
         desc = "Files",
@@ -233,7 +246,7 @@ M.spec = {
       {
         "<leader>sG",
         M.fzf("live_grep_glob", {
-          rg_opts = M.rg_opts_with_ignored,
+          rg_opts = M.rg_opts_unrestricted,
           winopts = M.win_presets.large.vertical,
         }),
         desc = "Grep (excluding .git)",
@@ -279,7 +292,7 @@ M.spec = {
       {
         "<leader>sW",
         M.fzf("grep_cword", {
-          rg_opts = M.rg_opts_with_ignored,
+          rg_opts = M.rg_opts_unrestricted,
           winopts = M.win_presets.large.vertical,
         }),
         desc = "Grep Word (excluding .git)",
@@ -287,7 +300,7 @@ M.spec = {
       {
         "<leader>sW",
         M.fzf("grep_visual", {
-          rg_opts = M.rg_opts_with_ignored,
+          rg_opts = M.rg_opts_unrestricted,
           winopts = M.win_presets.large.vertical,
         }),
         mode = "v",
@@ -434,7 +447,7 @@ M.spec = {
           color_icons = true, -- colorize file|git icons
           find_opts = "-type f -not -path '*/.git/*' -printf '%P\n'",
           rg_opts = M.rg_opts,
-          fd_opts = "--color=never --type f --hidden --follow --exclude .git",
+          fd_opts = M.fd_opts,
           actions = {
             ["default"] = actions.file_edit_or_qf,
             ["ctrl-s"] = actions.file_split,
