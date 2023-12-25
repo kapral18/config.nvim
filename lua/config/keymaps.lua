@@ -1,3 +1,12 @@
+-- Tab and shift-tab to shift line or selection right or left
+-- For normal mode
+vim.keymap.set("n", "<Tab>", ">>", { noremap = true })
+vim.keymap.set("n", "<S-Tab>", "<<", { noremap = true })
+
+-- For visual mode
+vim.keymap.set("v", "<Tab>", ">gv", { noremap = true })
+vim.keymap.set("v", "<S-Tab>", "<gv", { noremap = true })
+
 -- map shift j and shift k to beginning and end of line
 vim.keymap.set({ "n", "v" }, "<S-h>", "g^", { noremap = true, silent = true, desc = "Go to beginning of line" })
 vim.keymap.set({ "n", "v" }, "<S-l>", "g$", { noremap = true, silent = true, desc = "Go to end of line" })

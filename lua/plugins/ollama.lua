@@ -12,7 +12,7 @@ return {
     },
   },
   opts = {
-    model = "codebooga:16k",
+    model = "dolphin:programmer",
     display_mode = "float",
     show_model = true,
     no_serve = true,
