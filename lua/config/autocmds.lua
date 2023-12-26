@@ -85,3 +85,14 @@ aucmd("FileType", {
     vim.keymap.set("n", "q", "<cmd>close<CR>", { buffer = event.buf, silent = true })
   end,
 })
+
+aucmd("FileType", {
+  group = "k18",
+  -- merge patterns with the new ones
+  pattern = "Outline",
+  callback = function()
+    -- no spell
+    local cur_win = vim.api.nvim_get_current_win()
+    vim.api.nvim_set_option_value("spell", false, { win = cur_win })
+  end,
+})
