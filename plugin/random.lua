@@ -32,3 +32,12 @@ local function kill_all_buffers()
 end
 
 vim.api.nvim_create_user_command("KillAllBuffers", kill_all_buffers, {})
+
+_G.P = function(...)
+  local args = {}
+  for _, arg in ipairs({ ... }) do
+    table.insert(args, vim.inspect(arg))
+  end
+  print(unpack(args))
+  return ...
+end
