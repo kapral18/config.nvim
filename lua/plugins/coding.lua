@@ -1,9 +1,22 @@
 return {
   {
     "zbirenbaum/copilot.lua",
+    event = "InsertEnter",
     opts = {
       filetypes = {
         ["*"] = true,
+      },
+      suggestion = {
+        enabled = true,
+        auto_trigger = true,
+        keymap = {
+          accept = "<A-CR>",
+          accept_line = "<A-L>",
+          accept_word = "<A-W>",
+          next = "<A-]>",
+          prev = "<A-[>",
+          dismiss = "<A-c>",
+        },
       },
     },
   },
@@ -20,24 +33,5 @@ return {
       },
     },
     opts = { snippet_engine = "luasnip" },
-  },
-
-  -- Refactoring
-  {
-    "ThePrimeagen/refactoring.nvim",
-    keys = {
-      {
-        "<leader>r",
-        function()
-          require("refactoring").select_refactor({})
-        end,
-        mode = { "n", "x" },
-        remap = false,
-        silent = true,
-        expr = false,
-        desc = "Prime Refactor",
-      },
-    },
-    opts = {},
   },
 }

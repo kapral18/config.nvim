@@ -4,6 +4,7 @@ return {
     opts = function(_, opts)
       -- add tsx and treesitter
       vim.list_extend(opts.ensure_installed, {
+        "html",
         "css",
         "scss",
       })
@@ -15,16 +16,40 @@ return {
       vim.list_extend(opts.ensure_installed, {
         "css-lsp",
         "stylelint",
+        "emmet-language-server",
+        "html-lsp",
+        "cssmodules-language-server",
       })
     end,
   },
   {
     "neovim/nvim-lspconfig",
     opts = {
-      ---@type lspconfig.options
       servers = {
-        cssls = {},
         tailwindcss = {},
+        emmet_language_server = {},
+        html = {},
+        cssmodules_ls = {},
+        cssls = {
+          lint = {
+            compatibleVendorPrefixes = "ignore",
+            vendorPrefix = "ignore",
+            unknownVendorSpecificProperties = "ignore",
+
+            -- unknownProperties = "ignore", -- duplicate with stylelint
+
+            duplicateProperties = "warning",
+            emptyRules = "warning",
+            importStatement = "warning",
+            zeroUnits = "warning",
+            fontFaceProperties = "warning",
+            hexColorLength = "warning",
+            argumentsInColorFunction = "warning",
+            unknownAtRules = "warning",
+            ieHack = "warning",
+            propertyIgnoredDueToDisplay = "warning",
+          },
+        },
       },
       setup = {},
     },
@@ -68,5 +93,12 @@ return {
         return require("tailwindcss-colorizer-cmp").formatter(entry, item)
       end
     end,
+  },
+  {
+    "MaximilianLloyd/tw-values.nvim",
+    keys = {
+      { "<leader>cT", "<cmd>TWValues<cr>", desc = "Tailwind CSS values" },
+    },
+    opts = {},
   },
 }

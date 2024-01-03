@@ -159,8 +159,6 @@ return {
               vim.api.nvim_win_set_cursor(main_win_id, old_cursor_pos)
             end
 
-            require("nvim-lightbulb").update_lightbulb()
-
             events.fire_event(events.FILE_RENAMED, {
               source = path,
               destination = base_path .. "/" .. new_name,

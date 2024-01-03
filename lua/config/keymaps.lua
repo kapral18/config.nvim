@@ -8,8 +8,8 @@ vim.keymap.set("v", "<Tab>", ">gv", { noremap = true })
 vim.keymap.set("v", "<S-Tab>", "<gv", { noremap = true })
 
 -- map shift j and shift k to beginning and end of line
-vim.keymap.set({ "n", "v" }, "<S-h>", "g^", { noremap = true, silent = true, desc = "Go to beginning of line" })
-vim.keymap.set({ "n", "v" }, "<S-l>", "g$", { noremap = true, silent = true, desc = "Go to end of line" })
+vim.keymap.set({ "n", "v" }, "<S-h>", "_", { noremap = true, silent = true, desc = "Go to beginning of line" })
+vim.keymap.set({ "n", "v" }, "<S-l>", "$", { noremap = true, silent = true, desc = "Go to end of line" })
 
 -- disable save
 vim.keymap.del({ "n", "s", "x" }, "<C-s>")
@@ -78,3 +78,12 @@ vim.keymap.set({ "n", "t" }, "<C-S-Right>", "<cmd>vertical resize -2<cr>", { des
 -- overwrite lazyterm with toggleterm
 -- map("n", "<c-/>", lazyterm, { desc = "Terminal (root dir)" })
 vim.keymap.set("n", "<c-/>", "<cmd>ToggleTerm direction=float<cr>", { desc = "Terminal" })
+
+-- Toggle statusline
+vim.keymap.set("n", "<leader>uS", function()
+  if vim.opt.laststatus:get() == 0 then
+    vim.opt.laststatus = 3
+  else
+    vim.opt.laststatus = 0
+  end
+end, { desc = "Toggle Statusline" })

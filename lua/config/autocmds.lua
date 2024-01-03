@@ -73,7 +73,6 @@ aucmd("FileType", {
   -- merge patterns with the new ones
   pattern = vim.tbl_flatten({
     M,
-    "ObsidianBacklinks",
     "aerial-nav",
     "chatpgpt",
     "diagmsg",
