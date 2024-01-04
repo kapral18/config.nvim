@@ -261,4 +261,4 @@ local function open_eslint_path()
   end
 end
 
-vim.keymap.set("n", "<leader>sf", open_eslint_path, { desc = "Open eslint path" })
+vim.keymap.set("n", "<leader>sfe", open_eslint_path, { desc = "Open eslint path" })

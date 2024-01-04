@@ -75,5 +75,15 @@ local function del_virt_text_so_file()
   vim.cmd.write()
 end
 
-vim.keymap.set({ "n" }, "sff", add_virt_text_so_file, { noremap = true, desc = "Inline virt text of file execution" })
-vim.keymap.set({ "n" }, "sfd", del_virt_text_so_file, { noremap = true, desc = "Delete virt text of file execution" })
+vim.keymap.set(
+  { "n" },
+  "<leader>sff",
+  add_virt_text_so_file,
+  { noremap = true, desc = "Inline virt text of file execution" }
+)
+vim.keymap.set(
+  { "n" },
+  "<leader>sfd",
+  del_virt_text_so_file,
+  { noremap = true, desc = "Delete virt text of file execution" }
+)

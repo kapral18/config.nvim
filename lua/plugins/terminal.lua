@@ -56,4 +56,11 @@ return {
       },
     },
   },
+  {
+    "ryanmsnyder/toggleterm-manager.nvim",
+    opts = {},
+    keys = {
+      { "<c-/>", "<cmd>Telescope toggleterm_manager<cr>", desc = "Terminals" },
+    },
+  },
 }
