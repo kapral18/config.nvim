@@ -22,6 +22,14 @@ aucmd({ "FileType" }, {
   end,
 })
 
+aucmd({ "FileType" }, {
+  group = "k18",
+  pattern = { "dotenv" },
+  callback = function()
+    vim.bo.commentstring = "#%s"
+  end,
+})
+
 -- disable copilot for large files
 -- disable syntax highlighting for large files
 aucmd({ "BufReadPre" }, {
