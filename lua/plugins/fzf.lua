@@ -49,8 +49,10 @@ M.win_presets = {
   },
 }
 
-local rg_ignore_glob = "-g '!{node_modules,.next,dist,build,reports,.idea,.vscode,.yarn,.nyc_output,__generated__}/'"
-local fd_ignore_glob = "-E '{node_modules,.next,dist,build,reports,.idea,.vscode,.yarn,.nyc_output,__generated__}/'"
+local rg_ignore_glob =
+  "-g '!{node_modules,.next,dist,build,reports,.idea,.vscode,.yarn,.nyc_output,__generated__,reports,storybook-static}/' -g '!{*.min.js,*.min.css,junit.xml}'"
+local fd_ignore_glob =
+  "-E '{node_modules,.next,dist,build,reports,.idea,.vscode,.yarn,.nyc_output,__generated__,reports,storybook-static}/' -E '{*.min.js,*.min.css,junit.xml}'"
 
 M.rg_opts_unrestricted =
   "--column --line-number --no-heading --color=always --smart-case --max-columns=512 --hidden --no-ignore -g '!.git'"
